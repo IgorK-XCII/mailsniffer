@@ -1,5 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Alert, Box, Collapse, Stack, Typography } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Collapse,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import type { Email } from '@entities/email';
 import { useEmailsQuery } from '@entities/email';
@@ -11,6 +19,13 @@ import { useSelectedEmail } from '@features/email-select';
 const DETAIL_TRANSITION_MS = 300;
 
 export function MailboxPage() {
+  const theme = useTheme();
+  // Below `lg` (1200px) — small laptop / 14"-ish screen → use the collapsible
+  // single-pane experience. From `lg` upward → render both panes side by side
+  // permanently, so the inbox layout doesn't reflow every time the user opens
+  // or closes an email.
+  const isWideScreen = useMediaQuery(theme.breakpoints.up('lg'));
+
   const [query, setQuery] = useState('');
   const { selectedId, select, clear } = useSelectedEmail();
   const { data, isLoading, isFetching, error } = useEmailsQuery();
@@ -85,28 +100,38 @@ export function MailboxPage() {
             isFetching={isFetching}
           />
         </Box>
-        <Collapse
-          in={!!selectedEmail}
-          orientation="horizontal"
-          timeout={DETAIL_TRANSITION_MS}
-          unmountOnExit
-          data-testid="detail-collapse"
-          sx={{
-            height: '100%',
-            '& .MuiCollapse-wrapper, & .MuiCollapse-wrapperInner': {
-              height: '100%',
-            },
-          }}
-        >
+        {isWideScreen ? (
           <Box
+            sx={{ flex: 1.2, minWidth: 0, height: '100%' }}
+            data-testid="detail-pane"
+          >
+            <EmailDetailWidget email={selectedEmail} onClose={clear} />
+          </Box>
+        ) : (
+          <Collapse
+            in={!!selectedEmail}
+            orientation="horizontal"
+            timeout={DETAIL_TRANSITION_MS}
+            unmountOnExit
+            data-testid="detail-collapse"
             sx={{
-              width: { xs: '85vw', sm: 480, md: 'min(55vw, 720px)' },
               height: '100%',
+              '& .MuiCollapse-wrapper, & .MuiCollapse-wrapperInner': {
+                height: '100%',
+              },
             }}
           >
-            <EmailDetailWidget email={displayedEmail} onClose={clear} />
-          </Box>
-        </Collapse>
+            <Box
+              sx={{
+                width: { xs: '85vw', sm: 480, md: 'min(55vw, 720px)' },
+                height: '100%',
+              }}
+              data-testid="detail-pane"
+            >
+              <EmailDetailWidget email={displayedEmail} onClose={clear} />
+            </Box>
+          </Collapse>
+        )}
       </Box>
     </Box>
   );

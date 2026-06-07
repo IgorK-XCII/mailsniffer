@@ -7,6 +7,6 @@ export interface Email {
   subject: string;
   body: string;
   contentType: string;
-  hasAttachements: boolean;
+  hasAttachments: boolean;
   receivedAt: string;
 }

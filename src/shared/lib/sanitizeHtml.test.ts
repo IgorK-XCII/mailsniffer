@@ -17,6 +17,17 @@ describe('sanitizeHtml', () => {
     const out = sanitizeHtml('<img src="x" onerror="alert(1)" />');
     expect(out).not.toContain('onerror');
   });
+
+  it('preserves inline SVG so logos inside email bodies render', () => {
+    const svg =
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">' +
+      '<circle cx="12" cy="12" r="10" fill="red" />' +
+      '</svg>';
+    const out = sanitizeHtml(svg);
+    expect(out).toContain('<svg');
+    expect(out).toContain('<circle');
+    expect(out).toContain('fill="red"');
+  });
 });
 
 describe('isHtml', () => {

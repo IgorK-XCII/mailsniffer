@@ -24,6 +24,7 @@ import {
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import type { Email } from '@entities/email';
 import { formatRelative } from '@shared/lib/formatDate';
+import { decodeAddress } from '@shared/lib/parseAddress';
 
 interface EmailListWidgetProps {
   emails: Email[];
@@ -52,7 +53,7 @@ export function EmailListWidget({
         header: 'From',
         cell: (info) => (
           <Typography variant="body2" noWrap>
-            {info.getValue()}
+            {decodeAddress(info.getValue())}
           </Typography>
         ),
       }),
@@ -62,7 +63,7 @@ export function EmailListWidget({
           const row = info.row.original;
           return (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              {row.hasAttachements && (
+              {row.hasAttachments && (
                 <AttachFileIcon
                   fontSize="inherit"
                   aria-label="has attachments"
@@ -80,7 +81,7 @@ export function EmailListWidget({
         header: 'To',
         cell: (info) => (
           <Typography variant="body2" noWrap>
-            {info.getValue()}
+            {decodeAddress(info.getValue())}
           </Typography>
         ),
       }),

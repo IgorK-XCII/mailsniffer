@@ -96,4 +96,33 @@ describe('MailboxPage', () => {
       { timeout: 1500 },
     );
   });
+
+  it('keeps the detail pane permanently visible on wide screens', async () => {
+    // Pretend we are on a desktop monitor wider than the `lg` breakpoint.
+    const matchMediaSpy = vi
+      .spyOn(window, 'matchMedia')
+      .mockImplementation((q: string) => ({
+        matches: q.includes('min-width:1200'),
+        media: q,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      }));
+
+    mockFetchOnce(mockEmails);
+    renderWithProviders(<MailboxPage />);
+    await waitFor(() =>
+      expect(screen.getByText('Welcome aboard')).toBeInTheDocument(),
+    );
+
+    // No selection yet — but the right pane should already be rendered with the
+    // empty-state placeholder.
+    expect(screen.getByTestId('detail-pane')).toBeInTheDocument();
+    expect(screen.getByTestId('empty-detail')).toBeInTheDocument();
+
+    matchMediaSpy.mockRestore();
+  });
 });
