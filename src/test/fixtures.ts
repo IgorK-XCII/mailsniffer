@@ -10,7 +10,7 @@ export const mockEmails: Email[] = [
     subject: 'Welcome aboard',
     body: 'Hello Bob, welcome!',
     contentType: 'text/plain',
-    hasAttachements: false,
+    hasAttachments: false,
     receivedAt: '2026-06-07T10:00:00.000Z',
   },
   {
@@ -22,7 +22,7 @@ export const mockEmails: Email[] = [
     subject: 'Your invoice',
     body: '<p>Thanks for your <strong>purchase</strong></p>',
     contentType: 'text/html',
-    hasAttachements: true,
+    hasAttachments: true,
     receivedAt: '2026-06-06T08:30:00.000Z',
   },
   {
@@ -34,7 +34,7 @@ export const mockEmails: Email[] = [
     subject: 'Lunch?',
     body: 'Want to grab lunch tomorrow?',
     contentType: 'text/plain',
-    hasAttachements: false,
+    hasAttachments: false,
     receivedAt: '2026-06-05T12:00:00.000Z',
   },
 ];

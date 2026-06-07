@@ -7,7 +7,7 @@ interface Email {
   subject: string;
   body: string;
   contentType: string;
-  hasAttachements: boolean;
+  hasAttachments: boolean;
   receivedAt: string;
 }
 
@@ -20,7 +20,7 @@ const SAMPLES: Array<Omit<Email, 'id' | 'receivedAt'>> = [
     subject: 'Welcome to MailSniffer',
     body: 'Hi there!\n\nThis is a plain-text email demonstrating the UI.',
     contentType: 'text/plain',
-    hasAttachements: false,
+    hasAttachments: false,
   },
   {
     from: 'billing@shop.example',
@@ -36,7 +36,7 @@ const SAMPLES: Array<Omit<Email, 'id' | 'receivedAt'>> = [
   <p>Total: <strong>$108.90</strong></p>
 </body></html>`,
     contentType: 'text/html',
-    hasAttachements: true,
+    hasAttachments: true,
   },
   {
     from: 'carol@example.com',
@@ -46,7 +46,7 @@ const SAMPLES: Array<Omit<Email, 'id' | 'receivedAt'>> = [
     subject: 'Lunch next week?',
     body: 'Hey — want to grab lunch on Tuesday?\n\n— Carol',
     contentType: 'text/plain',
-    hasAttachements: false,
+    hasAttachments: false,
   },
   {
     from: 'noreply@github.com',
@@ -56,7 +56,7 @@ const SAMPLES: Array<Omit<Email, 'id' | 'receivedAt'>> = [
     subject: '[apps] Pull request opened: MailSniffer UI clone',
     body: '<p>A new pull request has been opened in <code>apps</code>.</p><p><a href="#">View on GitHub</a></p>',
     contentType: 'text/html',
-    hasAttachements: false,
+    hasAttachments: false,
   },
 ];
 

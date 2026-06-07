@@ -11,6 +11,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import type { Email } from '@entities/email';
 import { formatDate } from '@shared/lib/formatDate';
+import { decodeAddress } from '@shared/lib/parseAddress';
 import { isHtml, sanitizeHtml } from '@shared/lib/sanitizeHtml';
 
 interface EmailDetailWidgetProps {
@@ -83,10 +84,10 @@ export function EmailDetailWidget({ email, onClose }: EmailDetailWidgetProps) {
       <Divider />
       <Box sx={{ p: 2 }}>
         <Stack spacing={0.5}>
-          <MetaRow label="From" value={email.from} />
-          <MetaRow label="To" value={email.to} />
-          {email.cc && <MetaRow label="Cc" value={email.cc} />}
-          {email.bcc && <MetaRow label="Bcc" value={email.bcc} />}
+          <MetaRow label="From" value={decodeAddress(email.from)} />
+          <MetaRow label="To" value={decodeAddress(email.to)} />
+          {email.cc && <MetaRow label="Cc" value={decodeAddress(email.cc)} />}
+          {email.bcc && <MetaRow label="Bcc" value={decodeAddress(email.bcc)} />}
         </Stack>
         <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
           <Chip
@@ -94,7 +95,7 @@ export function EmailDetailWidget({ email, onClose }: EmailDetailWidgetProps) {
             label={email.contentType || 'text/plain'}
             data-testid="content-type-chip"
           />
-          {email.hasAttachements && (
+          {email.hasAttachments && (
             <Chip
               size="small"
               icon={<AttachFileIcon />}

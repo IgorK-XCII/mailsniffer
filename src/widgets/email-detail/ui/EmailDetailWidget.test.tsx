@@ -40,4 +40,26 @@ describe('EmailDetailWidget', () => {
     );
     expect(screen.getByText('(no subject)')).toBeInTheDocument();
   });
+
+  it('renders inline SVG inside the html body', () => {
+    const email = {
+      ...mockEmails[1],
+      body: '<p>logo</p><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" /></svg>',
+    };
+    render(<EmailDetailWidget email={email} />);
+    const html = screen.getByTestId('email-body-html');
+    expect(html.querySelector('svg')).not.toBeNull();
+    expect(html.querySelector('circle')).not.toBeNull();
+  });
+
+  it('decodes RFC 2047 encoded sender display names', () => {
+    const email = {
+      ...mockEmails[0],
+      from: '=?UTF-8?B?0KHQsdC10YAgSUQ=?=<example.from@mail.ru>',
+    };
+    render(<EmailDetailWidget email={email} />);
+    expect(
+      screen.getByText('Сбер ID <example.from@mail.ru>'),
+    ).toBeInTheDocument();
+  });
 });
