@@ -1,0 +1,14 @@
+import DOMPurify from 'dompurify';
+
+export function sanitizeHtml(input: string): string {
+  return DOMPurify.sanitize(input, {
+    USE_PROFILES: { html: true },
+    FORBID_TAGS: ['script', 'style'],
+    FORBID_ATTR: ['onerror', 'onload', 'onclick'],
+  });
+}
+
+export function isHtml(contentType: string, body: string): boolean {
+  if (contentType.toLowerCase().includes('html')) return true;
+  return /<\/?[a-z][\s\S]*>/i.test(body);
+}

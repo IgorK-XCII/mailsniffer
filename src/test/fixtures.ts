@@ -1,0 +1,40 @@
+import type { Email } from '@entities/email';
+
+export const mockEmails: Email[] = [
+  {
+    id: 'e1',
+    from: 'alice@example.com',
+    to: 'bob@example.com',
+    cc: null,
+    bcc: null,
+    subject: 'Welcome aboard',
+    body: 'Hello Bob, welcome!',
+    contentType: 'text/plain',
+    hasAttachements: false,
+    receivedAt: '2026-06-07T10:00:00.000Z',
+  },
+  {
+    id: 'e2',
+    from: 'noreply@shop.example',
+    to: 'bob@example.com',
+    cc: 'manager@shop.example',
+    bcc: null,
+    subject: 'Your invoice',
+    body: '<p>Thanks for your <strong>purchase</strong></p>',
+    contentType: 'text/html',
+    hasAttachements: true,
+    receivedAt: '2026-06-06T08:30:00.000Z',
+  },
+  {
+    id: 'e3',
+    from: 'carol@example.com',
+    to: 'bob@example.com',
+    cc: null,
+    bcc: 'archive@example.com',
+    subject: 'Lunch?',
+    body: 'Want to grab lunch tomorrow?',
+    contentType: 'text/plain',
+    hasAttachements: false,
+    receivedAt: '2026-06-05T12:00:00.000Z',
+  },
+];
