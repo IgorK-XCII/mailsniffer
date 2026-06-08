@@ -5,11 +5,12 @@ import type { ReactNode } from 'react';
 import { useEmailsQuery } from './useEmailsQuery';
 import { mockEmails } from '../../../test/fixtures';
 
-function wrapper(client: QueryClient) {
-  return function Wrap({ children }: { children: ReactNode }) {
-    return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
-  };
-}
+const wrapper = (client: QueryClient) => {
+  const Wrap = ({ children }: { children: ReactNode }) => (
+    <QueryClientProvider client={client}>{children}</QueryClientProvider>
+  );
+  return Wrap;
+};
 
 describe('useEmailsQuery', () => {
   beforeEach(() => {

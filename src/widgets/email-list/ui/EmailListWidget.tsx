@@ -20,23 +20,24 @@ import {
   Chip,
 } from '@mui/material';
 import type { Email } from '@entities/email';
+import type { Nullable } from '@shared/types';
 import { emailColumns } from '../lib/columns';
 
-interface EmailListWidgetProps {
+type EmailListWidgetProps = {
   emails: Email[];
-  selectedId: string | null;
+  selectedId: Nullable<string>;
   onSelect: (id: string) => void;
   isLoading?: boolean;
   isFetching?: boolean;
-}
+};
 
-function EmailListWidgetImpl({
+export const EmailListWidget = memo(({
   emails,
   selectedId,
   onSelect,
   isLoading,
   isFetching,
-}: EmailListWidgetProps) {
+}: EmailListWidgetProps) => {
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'receivedAt', desc: true },
   ]);
@@ -168,7 +169,4 @@ function EmailListWidgetImpl({
       </TableContainer>
     </Paper>
   );
-}
-
-export const EmailListWidget = memo(EmailListWidgetImpl);
-EmailListWidget.displayName = 'EmailListWidget';
+});

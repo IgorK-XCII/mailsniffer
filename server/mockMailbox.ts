@@ -1,15 +1,20 @@
-interface Email {
+// Local copies of the shared utility/type. The server is intentionally
+// self-contained (no path-alias resolution under tsx) so we duplicate
+// these tiny declarations instead of crossing the src/server boundary.
+type Nullable<T> = T | null;
+
+type Email = {
   id: string;
   from: string;
   to: string;
-  cc: null | string;
-  bcc: null | string;
+  cc: Nullable<string>;
+  bcc: Nullable<string>;
   subject: string;
   body: string;
   contentType: string;
   hasAttachments: boolean;
   receivedAt: string;
-}
+};
 
 const SAMPLES: Array<Omit<Email, 'id' | 'receivedAt'>> = [
   {

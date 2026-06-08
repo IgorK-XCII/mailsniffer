@@ -1,3 +1,5 @@
+import type { Nullable } from '@shared/types';
+
 /**
  * Decodes RFC 2047 "encoded-word" tokens that mail servers stuff into
  * address headers when the display name contains non-ASCII characters.
@@ -13,14 +15,14 @@
 
 const ENCODED_WORD_RE = /=\?([^?]+)\?([bBqQ])\?([^?]*)\?=/g;
 
-function base64ToBytes(b64: string): Uint8Array {
+const base64ToBytes = (b64: string): Uint8Array => {
   const bin = atob(b64.replace(/\s+/g, ''));
   const out = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i += 1) out[i] = bin.charCodeAt(i);
   return out;
-}
+};
 
-function quotedPrintableToBytes(qp: string): Uint8Array {
+const quotedPrintableToBytes = (qp: string): Uint8Array => {
   // RFC 2047 Q-encoding: `_` is literal space, `=XX` is a hex byte.
   const replaced = qp.replace(/_/g, ' ');
   const bytes: number[] = [];
@@ -40,9 +42,9 @@ function quotedPrintableToBytes(qp: string): Uint8Array {
     }
   }
   return Uint8Array.from(bytes);
-}
+};
 
-export function decodeMimeWord(raw: string): string {
+export const decodeMimeWord = (raw: string): string => {
   if (!raw) return raw;
   return raw.replace(
     ENCODED_WORD_RE,
@@ -59,7 +61,7 @@ export function decodeMimeWord(raw: string): string {
       }
     },
   );
-}
+};
 
 /**
  * Normalizes an address header for display.
@@ -67,8 +69,8 @@ export function decodeMimeWord(raw: string): string {
  * - inserts a space between display name and `<addr>` when the source omits it
  *   ("Name<a@b>" → "Name <a@b>")
  */
-export function decodeAddress(raw: string | null | undefined): string {
+export const decodeAddress = (raw: Nullable<string> | undefined): string => {
   if (!raw) return '';
   const decoded = decodeMimeWord(raw);
   return decoded.replace(/(\S)<([^>]+)>/g, '$1 <$2>').trim();
-}
+};

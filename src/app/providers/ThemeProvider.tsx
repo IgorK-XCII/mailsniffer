@@ -14,11 +14,9 @@ const theme = createTheme({
   },
 });
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
-  return (
-    <MuiThemeProvider theme={theme}>
-      <CssBaseline />
-      {children}
-    </MuiThemeProvider>
-  );
-}
+export const ThemeProvider = ({ children }: { children: ReactNode }) => (
+  <MuiThemeProvider theme={theme}>
+    <CssBaseline />
+    {children}
+  </MuiThemeProvider>
+);

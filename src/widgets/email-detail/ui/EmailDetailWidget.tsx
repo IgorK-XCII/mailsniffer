@@ -14,13 +14,14 @@ import type { Email } from '@entities/email';
 import { formatDate } from '@shared/lib/formatDate';
 import { decodeAddress } from '@shared/lib/parseAddress';
 import { isHtml, sanitizeHtml } from '@shared/lib/sanitizeHtml';
+import type { Nullable } from '@shared/types';
 
-interface EmailDetailWidgetProps {
-  email: Email | null;
+type EmailDetailWidgetProps = {
+  email: Nullable<Email>;
   onClose?: () => void;
-}
+};
 
-function EmailDetailWidgetImpl({ email, onClose }: EmailDetailWidgetProps) {
+export const EmailDetailWidget = memo(({ email, onClose }: EmailDetailWidgetProps) => {
   if (!email) {
     return (
       <Paper
@@ -128,24 +129,19 @@ function EmailDetailWidgetImpl({ email, onClose }: EmailDetailWidgetProps) {
       </Box>
     </Paper>
   );
-}
+});
 
-function MetaRow({ label, value }: { label: string; value: string }) {
-  return (
-    <Box sx={{ display: 'flex', gap: 1 }}>
-      <Typography
-        variant="caption"
-        color="text.secondary"
-        sx={{ width: 48, flexShrink: 0 }}
-      >
-        {label}:
-      </Typography>
-      <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>
-        {value}
-      </Typography>
-    </Box>
-  );
-}
-
-export const EmailDetailWidget = memo(EmailDetailWidgetImpl);
-EmailDetailWidget.displayName = 'EmailDetailWidget';
+const MetaRow = ({ label, value }: { label: string; value: string }) => (
+  <Box sx={{ display: 'flex', gap: 1 }}>
+    <Typography
+      variant="caption"
+      color="text.secondary"
+      sx={{ width: 48, flexShrink: 0 }}
+    >
+      {label}:
+    </Typography>
+    <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>
+      {value}
+    </Typography>
+  </Box>
+);
