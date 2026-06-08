@@ -1,3 +1,4 @@
+import { memo, useCallback } from 'react';
 import { TextField, InputAdornment, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -7,13 +8,19 @@ interface EmailSearchInputProps {
   onChange: (value: string) => void;
 }
 
-export function EmailSearchInput({ value, onChange }: EmailSearchInputProps) {
+function EmailSearchInputImpl({ value, onChange }: EmailSearchInputProps) {
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => onChange(event.target.value),
+    [onChange],
+  );
+  const handleClear = useCallback(() => onChange(''), [onChange]);
+
   return (
     <TextField
       size="small"
       placeholder="Search emails…"
       value={value}
-      onChange={(event) => onChange(event.target.value)}
+      onChange={handleChange}
       fullWidth
       inputProps={{ 'aria-label': 'search emails' }}
       InputProps={{
@@ -27,7 +34,7 @@ export function EmailSearchInput({ value, onChange }: EmailSearchInputProps) {
             <IconButton
               size="small"
               aria-label="clear search"
-              onClick={() => onChange('')}
+              onClick={handleClear}
             >
               <ClearIcon fontSize="small" />
             </IconButton>
@@ -37,3 +44,6 @@ export function EmailSearchInput({ value, onChange }: EmailSearchInputProps) {
     />
   );
 }
+
+export const EmailSearchInput = memo(EmailSearchInputImpl);
+EmailSearchInput.displayName = 'EmailSearchInput';

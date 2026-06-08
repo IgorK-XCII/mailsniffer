@@ -6,7 +6,6 @@ import {
   Stack,
   Typography,
   useMediaQuery,
-  useTheme,
 } from '@mui/material';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import type { Email } from '@entities/email';
@@ -15,16 +14,16 @@ import { EmailListWidget } from '@widgets/email-list';
 import { EmailDetailWidget } from '@widgets/email-detail';
 import { EmailSearchInput, filterEmails } from '@features/email-search';
 import { useSelectedEmail } from '@features/email-select';
+import { WIDE_LAYOUT_MEDIA_QUERY } from '@shared/config/constants';
 
 const DETAIL_TRANSITION_MS = 300;
 
 export function MailboxPage() {
-  const theme = useTheme();
-  // Below `lg` (1200px) — small laptop / 14"-ish screen → use the collapsible
-  // single-pane experience. From `lg` upward → render both panes side by side
-  // permanently, so the inbox layout doesn't reflow every time the user opens
-  // or closes an email.
-  const isWideScreen = useMediaQuery(theme.breakpoints.up('lg'));
+  // Below `WIDE_LAYOUT_MIN_WIDTH_PX` (1920px) — laptop or sub-27" desktop
+  // monitor → use the collapsible single-pane experience. At or above it we
+  // render both panes side by side permanently, so the inbox layout doesn't
+  // reflow when the user opens or closes an email.
+  const isWideScreen = useMediaQuery(WIDE_LAYOUT_MEDIA_QUERY);
 
   const [query, setQuery] = useState('');
   const { selectedId, select, clear } = useSelectedEmail();
