@@ -98,11 +98,12 @@ describe('MailboxPage', () => {
   });
 
   it('keeps the detail pane permanently visible on wide screens', async () => {
-    // Pretend we are on a desktop monitor wider than the `lg` breakpoint.
+    // Pretend we are on a 27"+ desktop monitor wider than the wide-layout
+    // threshold (`WIDE_LAYOUT_MIN_WIDTH_PX` = 1920).
     const matchMediaSpy = vi
       .spyOn(window, 'matchMedia')
       .mockImplementation((q: string) => ({
-        matches: q.includes('min-width:1200'),
+        matches: q.includes('min-width:1920'),
         media: q,
         onchange: null,
         addListener: vi.fn(),

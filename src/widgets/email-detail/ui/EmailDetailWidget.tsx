@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import {
   Box,
   Chip,
@@ -19,7 +20,7 @@ interface EmailDetailWidgetProps {
   onClose?: () => void;
 }
 
-export function EmailDetailWidget({ email, onClose }: EmailDetailWidgetProps) {
+function EmailDetailWidgetImpl({ email, onClose }: EmailDetailWidgetProps) {
   if (!email) {
     return (
       <Paper
@@ -145,3 +146,6 @@ function MetaRow({ label, value }: { label: string; value: string }) {
     </Box>
   );
 }
+
+export const EmailDetailWidget = memo(EmailDetailWidgetImpl);
+EmailDetailWidget.displayName = 'EmailDetailWidget';

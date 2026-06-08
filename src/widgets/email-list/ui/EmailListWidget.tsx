@@ -1,13 +1,11 @@
-import { useMemo } from 'react';
+import { memo, useCallback, useState } from 'react';
 import {
-  createColumnHelper,
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
   type SortingState,
 } from '@tanstack/react-table';
-import { useState } from 'react';
 import {
   Box,
   Paper,
@@ -21,10 +19,8 @@ import {
   Typography,
   Chip,
 } from '@mui/material';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
 import type { Email } from '@entities/email';
-import { formatRelative } from '@shared/lib/formatDate';
-import { decodeAddress } from '@shared/lib/parseAddress';
+import { emailColumns } from '../lib/columns';
 
 interface EmailListWidgetProps {
   emails: Email[];
@@ -34,9 +30,7 @@ interface EmailListWidgetProps {
   isFetching?: boolean;
 }
 
-const columnHelper = createColumnHelper<Email>();
-
-export function EmailListWidget({
+function EmailListWidgetImpl({
   emails,
   selectedId,
   onSelect,
@@ -47,67 +41,18 @@ export function EmailListWidget({
     { id: 'receivedAt', desc: true },
   ]);
 
-  const columns = useMemo(
-    () => [
-      columnHelper.accessor('from', {
-        header: 'From',
-        cell: (info) => (
-          <Typography variant="body2" noWrap>
-            {decodeAddress(info.getValue())}
-          </Typography>
-        ),
-      }),
-      columnHelper.accessor('subject', {
-        header: 'Subject',
-        cell: (info) => {
-          const row = info.row.original;
-          return (
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              {row.hasAttachments && (
-                <AttachFileIcon
-                  fontSize="inherit"
-                  aria-label="has attachments"
-                  data-testid="attachment-icon"
-                />
-              )}
-              <Typography variant="body2" noWrap>
-                {info.getValue()}
-              </Typography>
-            </Box>
-          );
-        },
-      }),
-      columnHelper.accessor('to', {
-        header: 'To',
-        cell: (info) => (
-          <Typography variant="body2" noWrap>
-            {decodeAddress(info.getValue())}
-          </Typography>
-        ),
-      }),
-      columnHelper.accessor('receivedAt', {
-        header: 'Received',
-        cell: (info) => (
-          <Typography variant="caption" color="text.secondary" noWrap>
-            {formatRelative(info.getValue())}
-          </Typography>
-        ),
-        sortingFn: (a, b) =>
-          new Date(a.original.receivedAt).getTime() -
-          new Date(b.original.receivedAt).getTime(),
-      }),
-    ],
-    [],
-  );
-
   const table = useReactTable({
     data: emails,
-    columns,
+    columns: emailColumns,
     state: { sorting },
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });
+
+  // Stable click handler factory keeps row click listeners referentially
+  // equal between renders when the underlying email id has not changed.
+  const handleSelect = useCallback((id: string) => () => onSelect(id), [onSelect]);
 
   return (
     <Paper
@@ -183,7 +128,7 @@ export function EmailListWidget({
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={columns.length} align="center">
+                <TableCell colSpan={emailColumns.length} align="center">
                   <Typography variant="body2" color="text.secondary">
                     Loading…
                   </Typography>
@@ -191,7 +136,7 @@ export function EmailListWidget({
               </TableRow>
             ) : table.getRowModel().rows.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={columns.length} align="center">
+                <TableCell colSpan={emailColumns.length} align="center">
                   <Typography variant="body2" color="text.secondary">
                     No emails found
                   </Typography>
@@ -205,7 +150,7 @@ export function EmailListWidget({
                     key={row.id}
                     hover
                     selected={isSelected}
-                    onClick={() => onSelect(row.original.id)}
+                    onClick={handleSelect(row.original.id)}
                     sx={{ cursor: 'pointer' }}
                     data-testid={`email-row-${row.original.id}`}
                   >
@@ -224,3 +169,6 @@ export function EmailListWidget({
     </Paper>
   );
 }
+
+export const EmailListWidget = memo(EmailListWidgetImpl);
+EmailListWidget.displayName = 'EmailListWidget';
