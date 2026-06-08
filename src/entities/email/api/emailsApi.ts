@@ -1,6 +1,5 @@
 import { httpGet } from '@shared/api/httpClient';
 import type { Email } from '../model/types';
 
-export function fetchEmails(signal?: AbortSignal): Promise<Email[]> {
-  return httpGet<Email[]>('/emails', signal);
-}
+export const fetchEmails = (signal?: AbortSignal): Promise<Email[]> =>
+  httpGet<Email[]>('/emails', signal);

@@ -3,12 +3,12 @@ import { POLLING_INTERVAL_MS, QUERY_KEYS } from '@shared/config/constants';
 import { fetchEmails } from '../api/emailsApi';
 import type { Email } from './types';
 
-export interface UseEmailsQueryOptions {
+export type UseEmailsQueryOptions = {
   pollingInterval?: number;
   enabled?: boolean;
-}
+};
 
-export function useEmailsQuery(options: UseEmailsQueryOptions = {}) {
+export const useEmailsQuery = (options: UseEmailsQueryOptions = {}) => {
   const { pollingInterval = POLLING_INTERVAL_MS, enabled = true } = options;
 
   return useQuery<Email[]>({
@@ -18,4 +18,4 @@ export function useEmailsQuery(options: UseEmailsQueryOptions = {}) {
     refetchIntervalInBackground: false,
     enabled,
   });
-}
+};

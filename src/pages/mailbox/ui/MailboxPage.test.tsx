@@ -5,7 +5,7 @@ import { MailboxPage } from './MailboxPage';
 import { renderWithProviders } from '../../../test/renderWithProviders';
 import { mockEmails } from '../../../test/fixtures';
 
-function mockFetchOnce(payload: unknown, ok = true) {
+const mockFetchOnce = (payload: unknown, ok = true) => {
   vi.stubGlobal(
     'fetch',
     vi.fn().mockResolvedValue({
@@ -15,7 +15,7 @@ function mockFetchOnce(payload: unknown, ok = true) {
       json: () => Promise.resolve(payload),
     }),
   );
-}
+};
 
 describe('MailboxPage', () => {
   afterEach(() => {

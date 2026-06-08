@@ -7,7 +7,7 @@ export class HttpError extends Error {
   }
 }
 
-export async function httpGet<T>(path: string, signal?: AbortSignal): Promise<T> {
+export const httpGet = async <T>(path: string, signal?: AbortSignal): Promise<T> => {
   const response = await fetch(`${API_BASE_URL}${path}`, { signal });
 
   if (!response.ok) {
@@ -15,4 +15,4 @@ export async function httpGet<T>(path: string, signal?: AbortSignal): Promise<T>
   }
 
   return response.json() as Promise<T>;
-}
+};

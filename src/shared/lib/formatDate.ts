@@ -1,4 +1,4 @@
-export function formatDate(iso: string): string {
+export const formatDate = (iso: string): string => {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) {
     return iso;
@@ -11,9 +11,9 @@ export function formatDate(iso: string): string {
     hour: '2-digit',
     minute: '2-digit',
   }).format(date);
-}
+};
 
-export function formatRelative(iso: string, now: Date = new Date()): string {
+export const formatRelative = (iso: string, now: Date = new Date()): string => {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) {
     return iso;
@@ -29,4 +29,4 @@ export function formatRelative(iso: string, now: Date = new Date()): string {
   const days = Math.floor(hr / 24);
   if (days < 7) return `${days} d ago`;
   return formatDate(iso);
-}
+};

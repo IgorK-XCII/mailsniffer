@@ -1,8 +1,8 @@
-export function matchesQuery<T extends object>(
+export const matchesQuery = <T extends object>(
   item: T,
   query: string,
   fields: Array<keyof T>,
-): boolean {
+): boolean => {
   if (!query.trim()) return true;
   const needle = query.trim().toLowerCase();
   return fields.some((field) => {
@@ -10,4 +10,4 @@ export function matchesQuery<T extends object>(
     if (value == null) return false;
     return String(value).toLowerCase().includes(needle);
   });
-}
+};
